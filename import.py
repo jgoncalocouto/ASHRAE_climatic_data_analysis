@@ -4,6 +4,8 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import math
+import datetime
+import sympy
 #endregion
 
 #region Functions
@@ -283,6 +285,7 @@ def apparent_solar_time(n,LST,longitude,time_zone,LSM=None,DST=None):
 
 def hour_angle(AST):
     H=15*(AST-12)
+
     return H
 
 def solar_altitude(latitude,delta,H):
@@ -301,25 +304,40 @@ def azimuth_angle(H,delta,beta,latitude):
     H=math.radians(H)
     beta=math.radians(beta)
 
-    sin_phi=(math.sin(H)*math.cos(delta))/math.cos(beta)
-    cos_phi=(math.cos(H)*math.cos(delta)*math.sin(L)-math.sin(delta)*math.cos(L))/(math.cos(beta))
+    phi=sympy.Symbol('phi',real=True)
 
-    # solution to a trigonometric equation has two solutions in [0,2*pi]:
-    phi_sin=np.array([math.asin(sin_phi),math.pi-math.asin(sin_phi)])
-    phi_cos=np.array([math.acos(cos_phi),2*math.pi-math.acos(cos_phi)])
+    e1=sympy.Eq(sympy.sin(phi),(math.sin(H)*math.cos(delta))/(math.cos(beta)))
+    e2=sympy.Eq(sympy.cos(phi),((math.cos(H)*math.cos(delta)*math.sin(L))-(math.sin(delta)*math.cos(L)))/(math.cos(beta)))
 
-    # solution for phi is the angle which minimizes the difference between cos(phi) and sin(phi)
-    phi_aux1=np.concatenate((phi_sin,phi_sin))
-    phi_aux2=reversed_arr = np.concatenate((phi_cos,phi_cos[::-1]))
-    err_rel=abs(phi_aux1-phi_aux2)
-    x=err_rel.argmin()
-    phi=math.degrees(phi_aux1[x])
+
+
+    try:
+        sol1 = sympy.solve([e1], phi)
+        sol2 = sympy.solve([e2], phi)
+        min=100
+        for i,valuei in enumerate(sol1):
+            for j,valuej in enumerate(sol2):
+                err=abs(valuei[0]-valuej[0])
+                if err<min:
+                    sol=i
+                    min=err
+        min_error=(min/sol1[sol][0])*100
+        phi=sol1[sol][0]
+    except:
+        print('Solution could not be obtained for azimuth angle')
+        phi=np.nan
+    phi=math.degrees(phi)
 
     return phi
+
 
 def relative_air_mass(beta):
     beta=math.radians(beta)
     m=1/(math.sin(beta)+0.50572*(6.07995+math.degrees(beta))**(-1.6364))
+
+    if m.imag!=0:
+        m=np.nan
+
 
     return m
 
@@ -356,7 +374,7 @@ def incidence_angle(beta,surface_azimuth,phi,tilt_angle):
     tilt_angle=math.radians(tilt_angle)
     gama=math.radians(gama)
 
-    theta=math.acos(math.cos(beta)*math.cos(gama)*math.cos(tilt_angle)+math.sin(beta)*math.cos(tilt_angle))
+    theta=math.acos(math.cos(beta)*math.cos(gama)*math.sin(tilt_angle)+math.sin(beta)*math.cos(tilt_angle))
     theta=math.degrees(theta)
 
     return theta
@@ -381,6 +399,38 @@ def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
 
     return E_bt,E_dt,E_rt
 
+def generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt_angle,radiation_data):
+    LST=np.arange(0,24,0.5)
+    df = pd.DataFrame(index = LST)
+
+    delta = solar_declination(n_day)
+    E_0=extraterrestrial_radiant_flux(n_day)
+    month=get_month_from_n(n_day)
+    tau_d=radiation_data['tau_d'][month]
+    tau_b = radiation_data['tau_b'][month]
+
+
+    df['LST']=df.index
+    for i,r in df.iterrows():
+        df['AST']=apparent_solar_time(n_day, df.index, longitude, time_zone, LSM = None, DST = None)
+        df.loc[i,'H']=hour_angle(df['AST'][i])
+        df.loc[i,'beta']=solar_altitude(latitude,delta,df['H'][i])
+        df.loc[i,'phi']=azimuth_angle(df['H'][i], delta, df['beta'][i], latitude)
+        df.loc[i,'theta']=incidence_angle(df['beta'][i],surface_azimuth,df['phi'][i],tilt_angle)
+        df.loc[i,'m']=relative_air_mass(df['beta'][i])
+        df.loc[i,'Eb,n'],df.loc[i,'Ed,n']=normal_irradiance(E_0, tau_b, tau_d, df['m'][i])
+        df.loc[i,'Eb,surface'], df.loc[i,'Ed,surface'],df.loc[i,'Er,surface']=on_surface_irradiance(df['Eb,n'][i],df['Ed,n'][i],df['theta'][i],tilt_angle,df['beta'][i],rho_g=0.2)
+
+    return df
+
+def get_month_from_n(n):
+    d0=datetime.date(2000,1,1)
+    d2=d0+datetime.timedelta(n)
+    month=d2.strftime('%b')
+    return month
+
+
+
 
 #endregion
 
@@ -390,6 +440,12 @@ def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
 location,latitude,longitude, altitude, time_zone, period_of_analysis, heating, cooling, extreme_V_wind, extreme_T_wb,\
 extreme_T_db, return_periods_extreme_T_db, design_degree_days, T_db_monthly,T_wb_monthly, T_Ranges_monthly, \
 radiation = extract_ashrae_data(r'data_files/test.xlsx')
+
+surface_azimuth=direction_to_surface_azimuth('S')
+tilt_angle=0
+n_day=60+15
+df=generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt_angle,radiation)
+
 
 #endregion
 

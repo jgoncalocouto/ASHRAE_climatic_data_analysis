@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/import.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,17 +95,9 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="383" y="376" width="1089" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590615604226">
-      <screen x="159" y="0" width="2401" height="1440" />
+    <state x="240" y="363" key="SettingsEditor" timestamp="1601389819797">
+      <screen x="121" y="0" width="2439" height="1440" />
     </state>
-    <state x="383" y="376" width="1089" height="706" key="#com.intellij.execution.impl.EditConfigurationsDialog/159.0.2401.1440@159.0.2401.1440" timestamp="1590615604226" />
-    <state x="430" y="363" key="SettingsEditor" timestamp="1590615631217">
-      <screen x="159" y="0" width="2401" height="1440" />
-    </state>
-    <state x="430" y="363" key="SettingsEditor/159.0.2401.1440@159.0.2401.1440" timestamp="1590615631217" />
-    <state x="1622" y="329" width="672" height="678" key="search.everywhere.popup" timestamp="1591130595509">
-      <screen x="159" y="0" width="2401" height="1440" />
-    </state>
-    <state x="1622" y="329" width="672" height="678" key="search.everywhere.popup/159.0.2401.1440@159.0.2401.1440" timestamp="1591130595509" />
+    <state x="240" y="363" key="SettingsEditor/4021.1309.1739.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601389819797" />
   </component>
 </project>
