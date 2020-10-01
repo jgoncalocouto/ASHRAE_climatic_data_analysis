@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 import math
 import datetime
 import sympy
+import scipy.stats
+import seaborn as sns
+
+
 #endregion
 
 #region Functions
@@ -429,6 +433,30 @@ def get_month_from_n(n):
     month=d2.strftime('%b')
     return month
 
+def generate_Tsample(month,n_sample,design_degree_days):
+    mean=design_degree_days['T_db: mean'][month]
+    std=design_degree_days['T_db: std'][month]
+    dist=scipy.stats.norm(mean,std)
+    T=dist.rvs(n_sample)
+    return T
+
+def generate_df_Tdistribution(n_sample,design_degree_days,plot=True):
+    df=pd.DataFrame(columns=['T','Month'])
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    for month in months:
+        T=generate_Tsample(month,n_sample,design_degree_days)
+        df_aux = pd.DataFrame(columns = ['T','Month'])
+        df_aux['T']=T
+        df_aux['Month']=month
+        df=df.append(df_aux,ignore_index=True)
+    if plot == True:
+        ax=sns.displot(df,x='T',hue='Month', label = month,kind='kde',fill=True)
+    plt.xlabel('Dry-Bulb Temperature - [°C]')
+    plt.ylabel('Probability Density Function - f - [-]')
+    plt.title('Dry-bulb Monthly Temperature Distribution')
+    return df,ax
+
+
 
 
 
@@ -506,5 +534,12 @@ add_subplot_to_annual_graph(list_of_axes,list_of_lines,1,x=x,y_avg=y_avg,y_avg_e
                             y_extreme_max_err=y_extreme_max_err,x_axis_title=x_axis_title,y_axis_title=y_axis_title,
                             subplot_title=subplot_title)
 #endregion
+
+#region Figure 2
+
+df_T,ax=generate_df_Tdistribution(100000,design_degree_days,plot=True)
+ax.fig.set_size_inches(16, 8)
+list_of_axes.append(ax.ax)
+list_of_figures.append(ax.fig)
 
 #endregion

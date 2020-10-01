@@ -92,12 +92,29 @@
       <option name="presentableId" value="Default" />
       <updated>1590615438970</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added function to generate hourly data of radiation and &quot;sun angles&quot;. &#10;In the process of doing that, azimuth-angle was improved with sympy solve modules, but this change was irrelevant to the final result. Only simplified the code">
+      <created>1601473848075</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1601473848075</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added function to generate hourly data of radiation and &quot;sun angles&quot;. &#10;In the process of doing that, azimuth-angle was improved with sympy solve modules, but this change was irrelevant to the final result. Only simplified the code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added function to generate hourly data of radiation and &quot;sun angles&quot;. &#10;In the process of doing that, azimuth-angle was improved with sympy solve modules, but this change was irrelevant to the final result. Only simplified the code" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="240" y="363" key="SettingsEditor" timestamp="1601389819797">
+    <state x="496" y="247" width="1115" height="809" key="CommitChangelistDialog2" timestamp="1601473847566">
+      <screen x="121" y="0" width="2439" height="1440" />
+    </state>
+    <state x="496" y="247" width="1115" height="809" key="CommitChangelistDialog2/4022.1309.1738.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601473847566" />
+    <state x="240" y="363" key="SettingsEditor" timestamp="1601566011945">
       <screen x="121" y="0" width="2439" height="1440" />
     </state>
     <state x="240" y="363" key="SettingsEditor/4021.1309.1739.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601389819797" />
+    <state x="240" y="363" key="SettingsEditor/4022.1309.1738.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601566011945" />
   </component>
 </project>
