@@ -1,4 +1,5 @@
 #region Import Modules
+
 import pandas as pd
 import numpy as np
 import math
@@ -9,13 +10,12 @@ import sympy
 import scipy.stats
 import seaborn as sns
 
-
 #endregion
 
 #region Functions
 
 def get_latitude(latitude_string):
-    coordinate_designation , coordinate_value_string=latitude_string.split(':')
+    coordinate_designation ,  coordinate_value_string = latitude_string.split(':')
     try:
         if coordinate_designation.lower()=='lat':
             if coordinate_value_string[-1].lower()=='n':
@@ -24,7 +24,7 @@ def get_latitude(latitude_string):
                 latitude = -float(coordinate_value_string[:-1])
             else:
                 print('Unknown latitude direction: '+coordinate_value_string[-1])
-        return latitude
+        return latitude #[°N]
     except:
         print('Unknown format! Expected:\'Lat:XXX.XX N\' or \'Lat:XXX.XX S\'')
         print('Text Received: ' + latitude_string)
@@ -39,7 +39,7 @@ def get_longitude(longitude_string):
                 longitude = -float(coordinate_value_string[:-1])
             else:
                 print('Unknown longitude direction: '+coordinate_value_string[-1])
-        return longitude
+        return longitude #[°E]
     except:
         print('Unknown format! Expected:\'Long:XXX.XX N\' or \'Long:XXX.XX S\'')
         print('Text Received: '+longitude_string)
@@ -50,7 +50,7 @@ def get_period(period_string):
     try:
         if coordinate_designation.lower()=='period':
             period=[float(x)+1900 if float(x)>=30 else float(x)+2000 for x in period_raw]
-        return period
+        return period #period of analysis: Ashrae
     except:
         print('Unknown format! Expected:\'Period: XX-XX \'')
         print('Text Received: '+period_string)
@@ -114,6 +114,7 @@ def get_climatic_summary_3(column_names,indexes,line,key_1,key_2,key_3,key_4,df)
     return climatic_summary
 
 def get_daily_temperature(T_max,T_range,identifier):
+    # daily temperature profile was determined by statistical analysis on different locations, it is not location-specific
     columns = ['AST', 'f_tr']
     index = list(range(1, 25))
     f = [0.88, 0.92, 0.95, 0.98, 1, 0.98, 0.91, 0.74, 0.55, 0.38, 0.23, 0.13, 0.05, 0, 0, 0.06, 0.14, 0.24, 0.39, 0.5,
@@ -123,7 +124,7 @@ def get_daily_temperature(T_max,T_range,identifier):
     T=fraction_of_daily_temperature_range.copy()
     T[identifier]=T_max-T['f_tr']*T_range
     del T['f_tr']
-    return T
+    return T #[°C]
 
 def extract_ashrae_data(filename):
     df = pd.read_excel (filename)
@@ -201,7 +202,6 @@ def extract_ashrae_data(filename):
     columns_names=['T_db: Range','T_db: Range @ 95% T_db','T_wb: Range @ 95% T_db','T_db: Range @ 95% T_wb','T_wb: Range @ 95% T_wb']
     T_Ranges_monthly=pd.DataFrame(data=df[df.columns[4:16]][58:63].values.transpose(),columns=columns_names,index=indexes_names)
 
-
     indexes_names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
     columns_names=['tau_b','tau_d','Ebn,noon','Edn,noon']
     radiation=pd.DataFrame(data=df[df.columns[4:16]][64:68].values.transpose(),columns=columns_names,index=indexes_names)
@@ -267,16 +267,16 @@ def add_subplot_to_annual_graph(list_of_axes,list_of_lines,i,x=None,y_avg=None,y
 def extraterrestrial_radiant_flux(n):
     E_sc=1367 #[W/m^2]
     E_0=E_sc*(1+0.033*math.cos(math.radians(360*(n-3)/365)))
-    return E_0
+    return E_0 #[W/m^2]
 
 def equation_of_time(n):
     tau=math.radians(360*(n-1)/365)
     ET=2.2918*(0.0075+0.1868*math.cos(tau)-3.2077*math.sin(tau)-1.4615*math.cos(2*tau)-4.089*math.sin(2*tau))
-    return ET
+    return ET #[min]
 
 def solar_declination(n):
     delta=23.45*math.sin(math.radians(360*(n+284)/365))
-    return delta
+    return delta #[°]
 
 def apparent_solar_time(n,LST,longitude,time_zone,LSM=None,DST=None):
     if LSM==None:
@@ -285,12 +285,11 @@ def apparent_solar_time(n,LST,longitude,time_zone,LSM=None,DST=None):
         LST-=1
     ET=equation_of_time(n)
     AST=LST+(ET/60)+(longitude-LSM)/15
-    return AST
+    return AST #[h]
 
 def hour_angle(AST):
     H=15*(AST-12)
-
-    return H
+    return H #[°]
 
 def solar_altitude(latitude,delta,H):
     L=math.radians(latitude)
@@ -300,7 +299,7 @@ def solar_altitude(latitude,delta,H):
     beta=math.asin((math.cos(L)*math.cos(delta)*math.cos(H))+(math.sin(L)*math.sin(delta)))
     beta=math.degrees(beta)
 
-    return beta
+    return beta #[°]
 
 def azimuth_angle(H,delta,beta,latitude):
     L=math.radians(latitude)
@@ -312,8 +311,6 @@ def azimuth_angle(H,delta,beta,latitude):
 
     e1=sympy.Eq(sympy.sin(phi),(math.sin(H)*math.cos(delta))/(math.cos(beta)))
     e2=sympy.Eq(sympy.cos(phi),((math.cos(H)*math.cos(delta)*math.sin(L))-(math.sin(delta)*math.cos(L)))/(math.cos(beta)))
-
-
 
     try:
         sol1 = sympy.solve([e1], phi)
@@ -332,7 +329,7 @@ def azimuth_angle(H,delta,beta,latitude):
         phi=np.nan
     phi=math.degrees(phi)
 
-    return phi
+    return phi #[°]
 
 
 def relative_air_mass(beta):
@@ -342,8 +339,7 @@ def relative_air_mass(beta):
     if m.imag!=0:
         m=np.nan
 
-
-    return m
+    return m #[]
 
 def normal_irradiance(E_0,tau_b,tau_d,m):
     ab = 1.454 - 0.406*tau_b - 0.268*tau_d + 0.021*tau_b*tau_d
@@ -352,7 +348,7 @@ def normal_irradiance(E_0,tau_b,tau_d,m):
     E_b=E_0*math.exp(-tau_b*m**(ab))
     E_d=E_0*math.exp(-tau_d*m**(ad))
 
-    return E_b, E_d
+    return E_b, E_d #[W/m^2]
 
 def direction_to_surface_azimuth(direction):
     directions_key={
@@ -367,7 +363,7 @@ def direction_to_surface_azimuth(direction):
        }
     surface_azimuth=directions_key[direction]
 
-    return surface_azimuth
+    return surface_azimuth #[°]
 
 
 def incidence_angle(beta,surface_azimuth,phi,tilt_angle):
@@ -381,7 +377,7 @@ def incidence_angle(beta,surface_azimuth,phi,tilt_angle):
     theta=math.acos(math.cos(beta)*math.cos(gama)*math.sin(tilt_angle)+math.sin(beta)*math.cos(tilt_angle))
     theta=math.degrees(theta)
 
-    return theta
+    return theta #[°]
 
 def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
     tilt_angle=math.radians(tilt_angle)
@@ -401,7 +397,7 @@ def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
     # reflected component
     E_rt=(E_b*math.sin(beta)+E_d)*rho_g*((1+math.cos(beta))/2)
 
-    return E_bt,E_dt,E_rt
+    return E_bt,E_dt,E_rt #[W/m^2]
 
 def generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt_angle,radiation_data):
     LST=np.arange(0,24,0.5)
@@ -428,10 +424,23 @@ def generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt
     return df
 
 def get_month_from_n(n):
+    n=n-1
     d0=datetime.date(2000,1,1)
-    d2=d0+datetime.timedelta(n)
+    d2=d0+(datetime.timedelta(n))
     month=d2.strftime('%b')
-    return month
+    return month #[]
+
+def get_n_from_date(day,month):
+    d0 = datetime.date(2000, 1, 1)
+
+    if type(month)=='str':
+        month = datetime.datetime.strptime(month, "%b").month
+
+    d2=datetime.date(2000,month,day)
+
+    Deltat=d2-d0
+    n=Deltat.days
+    return n
 
 def generate_Tsample(month,n_sample,design_degree_days):
     mean=design_degree_days['T_db: mean'][month]
@@ -456,9 +465,117 @@ def generate_df_Tdistribution(n_sample,design_degree_days,plot=True):
     plt.title('Dry-bulb Monthly Temperature Distribution')
     return df,ax
 
+def month_limits(year):
+    d0 = datetime.date(year, 1, 1)
+    df=pd.DataFrame(columns=['Month','n_start','n_end','1st_day','last_day'])
+    for i in range(12-1):
+        d_first=datetime.date(year,i+1,1)
+        d_last = datetime.date(year, i + 2, 1)-datetime.timedelta(days=1)
+        df_aux=pd.DataFrame(columns=['Month','n_start','n_end'],index=np.arange(1,2,1))
+        df_aux['Month']=i+1
+        df_aux['1st_day']=d_first
+        df_aux['last_day'] = d_last
+        df_aux['n_start']=(d_first-d0).days+1
+        df_aux['n_end']=(d_last-d0).days+1
+        df=df.append(df_aux,ignore_index=True)
+    d_first = datetime.date(year, 12, 1)
+    d_last = datetime.date(year, 12, 31)
+    df_aux = pd.DataFrame(columns = ['Month', 'n_start', 'n_end'], index = np.arange(1, 2, 1))
+    df_aux['Month'] = 12
+    df_aux['1st_day'] = d_first
+    df_aux['last_day'] = d_last
+    df_aux['n_start'] = (d_first - d0).days + 1
+    df_aux['n_end'] = (d_last - d0).days + 1
+    df = df.append(df_aux, ignore_index = True)
+
+    return df
 
 
+def time_period_df(date_start,date_end):
+    year_start=date_start.year
+    year_finish=date_end.year
 
+    dic_days=month_limits(year_start)
+
+    df=pd.DataFrame(columns=['Year','Month','Number of days'],index=np.arange(1,2,1))
+    n_end=dic_days[dic_days['Month']==date_start.month]['n_end'].values
+    n_start=dic_days[dic_days['Month']==date_start.month]['n_start'].values
+    df['Number of days']=(n_end-n_start)-date_start.day+1
+    df['Year']=date_start.year
+    df['Month']=date_start.month
+
+    date_i=datetime.date(year_start,date_start.month,1)
+    while date_i<date_end:
+        month=date_i.month
+        year=date_i.year
+        try:
+            date_i=datetime.date(year,month+1,1)
+        except:
+            date_i=datetime.date(year+1,1,1)
+        df_aux=pd.DataFrame(columns=['Year','Month','Number of days'])
+        n_end = dic_days[dic_days['Month'] == date_i.month]['n_end'].values
+        n_start = dic_days[dic_days['Month'] == date_i.month]['n_start'].values
+        df_aux['Number of days']=n_end-n_start+1
+        df_aux['Year'] = date_i.year
+        df_aux['Month'] = date_i.month
+        df = df.append(df_aux, ignore_index = True)
+
+    df=df.drop(df[(df['Month']>=date_end.month)&(df['Year']==date_end.year)].index)
+    df_aux=pd.DataFrame(columns=['Year','Month','Number of days'],index=np.arange(1,2,1))
+    n_end=dic_days[dic_days['Month']==date_end.month]['n_end'].values
+    n_start=dic_days[dic_days['Month']==date_end.month]['n_start'].values
+    df_aux['Number of days']=date_end.day
+    df_aux['Year']=date_end.year
+    df_aux['Month']=date_end.month
+    df = df.append(df_aux, ignore_index = True)
+
+    return df
+
+
+def calculate_degree_days(date_start,date_end,T_heating,T_cooling,design_degree_days):
+    df_time=time_period_df(date_start,date_end)
+
+    df_sol=df_time.copy(deep=True)
+    df_sol['Heating Degree Days']=np.nan
+    df_sol['Cooling Degree Days']=np.nan
+
+    n_sample=100000
+    for row,column in df_sol.iterrows():
+        month=df_sol.loc[row,'Month']
+        d2=datetime.date(df_sol.loc[row,'Year'],month,1)
+        month = d2.strftime('%b')
+
+
+        mean = design_degree_days['T_db: mean'][month]
+        std = design_degree_days['T_db: std'][month]
+        dist = scipy.stats.norm(mean, std)
+        T=dist.rvs(n_sample)
+
+        x = np.arange(min(T), max(T), (max(T) - min(T)) / n_sample)
+
+        cdf=dist.cdf(x)
+        sf=dist.sf(x)
+
+
+        cdf_a=pd.DataFrame(columns=['T','sum_p'],data=list(np.array([x,cdf]).transpose()))
+        cdf_a['DeltaT']=T_heating-cdf_a['T']
+
+        sf_a=pd.DataFrame(columns=['T','sum_p'],data=list(np.array([x,sf]).transpose()))
+        sf_a['DeltaT']=sf_a['T']-T_cooling
+
+        cdf_a=cdf_a[cdf_a['T']<T_heating]
+        sf_a=sf_a[sf_a['T']>T_cooling]
+
+
+        HD=np.trapz(cdf_a['DeltaT'],cdf_a['sum_p'])
+        CD = np.trapz(sf_a['sum_p'],sf_a['DeltaT'])
+
+        HDD=HD*df_sol.loc[row,'Number of days']
+        CDD=CD*df_sol.loc[row,'Number of days']
+
+        df_sol.loc[row,'Heating Degree Days']= HDD
+        df_sol.loc[row, 'Cooling Degree Days'] = CDD
+    return df_sol
 
 #endregion
 
