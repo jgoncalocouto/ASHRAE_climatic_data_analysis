@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ashrae_data.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ashrae_data.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/import.py" afterDir="false" />
     </list>
@@ -25,12 +26,12 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/venv/venv_anaconda" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
@@ -59,9 +60,6 @@
       <module name="ashrae_data" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="C:\Users\JoãoGonçaloCouto\Documents\PycharmProjects\CFD\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -86,6 +84,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -111,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601568000852</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added calculation of heating and cooling degree days">
+      <created>1602079320324</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1602079320324</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -119,36 +125,40 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added function to generate hourly data of radiation and &quot;sun angles&quot;. &#10;In the process of doing that, azimuth-angle was improved with sympy solve modules, but this change was irrelevant to the final result. Only simplified the code" />
     <MESSAGE value="Added functions to generate T_db monthly distributions and plot it" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added functions to generate T_db monthly distributions and plot it" />
+    <MESSAGE value="Added calculation of heating and cooling degree days" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added calculation of heating and cooling degree days" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1453" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602078944866">
-      <screen x="-1814" y="0" width="1814" height="1080" />
+    <state x="479" y="195" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602082259383">
+      <screen x="121" y="0" width="1799" height="1080" />
     </state>
     <state x="-1453" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/121.0.1799.1080/-1814.0.1814.1080@-1814.0.1814.1080" timestamp="1602078944866" />
-    <state x="496" y="247" width="1115" height="809" key="CommitChangelistDialog2" timestamp="1601568000148">
-      <screen x="121" y="0" width="2439" height="1440" />
-    </state>
-    <state x="496" y="247" width="1115" height="809" key="CommitChangelistDialog2/4022.1309.1738.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601568000148" />
-    <state x="-1447" y="384" key="FileChooserDialogImpl" timestamp="1602077929009">
+    <state x="479" y="195" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog/121.0.1799.1080/-1814.0.1814.1080@121.0.1799.1080" timestamp="1602082259383" />
+    <state x="-1535" y="185" width="1115" height="809" key="CommitChangelistDialog2" timestamp="1602079319446">
       <screen x="-1814" y="0" width="1814" height="1080" />
+    </state>
+    <state x="-1535" y="185" key="CommitChangelistDialog2/121.0.1799.1080/-1814.0.1814.1080@-1814.0.1814.1080" timestamp="1602079319446" />
+    <state x="496" y="247" width="1115" height="809" key="CommitChangelistDialog2/4022.1309.1738.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601568000148" />
+    <state x="485" y="384" key="FileChooserDialogImpl" timestamp="1602081463617">
+      <screen x="121" y="0" width="1799" height="1080" />
     </state>
     <state x="-1447" y="384" key="FileChooserDialogImpl/121.0.1799.1080/-1814.0.1814.1080@-1814.0.1814.1080" timestamp="1602077929009" />
-    <state x="-1725" y="272" key="SettingsEditor" timestamp="1602079030138">
-      <screen x="-1814" y="0" width="1814" height="1080" />
+    <state x="485" y="384" key="FileChooserDialogImpl/121.0.1799.1080/-1814.0.1814.1080@121.0.1799.1080" timestamp="1602081463617" />
+    <state x="209" y="272" key="SettingsEditor" timestamp="1602082293371">
+      <screen x="121" y="0" width="1799" height="1080" />
     </state>
-    <state x="-1725" y="272" key="SettingsEditor/121.0.1799.1080/-1814.0.1814.1080@-1814.0.1814.1080" timestamp="1602079030138" />
+    <state x="-1725" y="272" key="SettingsEditor/121.0.1799.1080/-1814.0.1814.1080@-1814.0.1814.1080" timestamp="1602080149738" />
+    <state x="209" y="272" key="SettingsEditor/121.0.1799.1080/-1814.0.1814.1080@121.0.1799.1080" timestamp="1602082293371" />
     <state x="240" y="363" key="SettingsEditor/4021.1309.1739.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601389819797" />
     <state x="240" y="363" key="SettingsEditor/4022.1309.1738.1080/121.0.2439.1440@121.0.2439.1440" timestamp="1601566011945" />
   </component>

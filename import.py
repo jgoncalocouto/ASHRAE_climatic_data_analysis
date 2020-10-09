@@ -2,13 +2,14 @@
 
 import pandas as pd
 import numpy as np
-import math
 import matplotlib.pyplot as plt
 import math
 import datetime
 import sympy
 import scipy.stats
 import seaborn as sns
+import cartopy.crs as ccrs
+
 
 #endregion
 
@@ -258,10 +259,7 @@ def add_subplot_to_annual_graph(list_of_axes,list_of_lines,i,x=None,y_avg=None,y
     ax.set_ylabel(y_axis_title)
     ax.set_title(subplot_title)
     ax.legend(loc='upper right')
-    box = '\n'.join(("Location: " + str(location), "Latitude: " + str(latitude), "Longitude: " + str(longitude),
-                     "Altitude: " + str(altitude)))
-    ax.text(0.05, 0.95, box, transform=ax.transAxes, fontsize=10, va='top', ha="left",
-            bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))  ### boxplot
+
     return list_of_axes,list_of_lines
 
 def extraterrestrial_radiant_flux(n):
@@ -399,6 +397,11 @@ def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
 
     return E_bt,E_dt,E_rt #[W/m^2]
 
+def get_instant_radiation_data():
+    pass
+
+
+
 def generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt_angle,radiation_data):
     LST=np.arange(0,24,0.5)
     df = pd.DataFrame(index = LST)
@@ -430,16 +433,16 @@ def get_month_from_n(n):
     month=d2.strftime('%b')
     return month #[]
 
-def get_n_from_date(day,month):
-    d0 = datetime.date(2000, 1, 1)
+def get_n_from_date(day,month,year=2000):
+    d0 = datetime.date(year, 1, 1)
 
     if type(month)=='str':
         month = datetime.datetime.strptime(month, "%b").month
 
-    d2=datetime.date(2000,month,day)
+    d2=datetime.date(year,month,day)
 
     Deltat=d2-d0
-    n=Deltat.days
+    n=Deltat.days+1
     return n
 
 def generate_Tsample(month,n_sample,design_degree_days):
@@ -577,6 +580,19 @@ def calculate_degree_days(date_start,date_end,T_heating,T_cooling,design_degree_
         df_sol.loc[row, 'Cooling Degree Days'] = CDD
     return df_sol
 
+def calculate_monthly_representative_radiation(radiation,latitude,longitute,time_zone,year=2020,surface_azimuth=0,tilt_angle=0):
+    day=21
+
+    df=pd.DataFrame()
+
+    for i in range(12):
+        n_day=get_n_from_date(day,i+1,year)
+        df_day = generate_hourly_data(latitude, longitude, time_zone, n_day, surface_azimuth, tilt_angle, radiation)
+        df_day['Month']=i+1
+        df_day=df_day[(df_day['LST'] == 9) | (df_day['LST'] == 12) | (df_day['LST'] == 15) | (df_day['LST'] == 18)]
+        df=df.append(df_day,ignore_index=True)
+    return df
+
 #endregion
 
 #region Data Treatment
@@ -658,5 +674,45 @@ df_T,ax=generate_df_Tdistribution(100000,design_degree_days,plot=True)
 ax.fig.set_size_inches(16, 8)
 list_of_axes.append(ax.ax)
 list_of_figures.append(ax.fig)
+
+#endregion
+
+#region Figure 3
+
+fig=plt.figure(figsize=(16,8))
+ax = plt.axes(projection=ccrs.PlateCarree())
+ax.stock_img()
+list_of_axes.append(ax)
+list_of_figures.append(fig)
+ax.set_title('Details of the analysis')
+
+ny_lon, ny_lat = longitude, latitude
+
+plt.plot([ny_lon], [ny_lat],
+         color='indianred', linewidth=2, marker='o',
+         transform=ccrs.Geodetic(),
+         )
+
+
+box = '\n'.join((
+    "Location: " + str(location),
+    "Latitude: " + str(latitude),
+    "Longitude: " + str(longitude),
+    "Altitude: " + str(altitude),
+    "Period of the analysis: [" + "%4d"%(period_of_analysis[0])+" ; "+"%4d"%(period_of_analysis[1])+"]",
+))
+ax.text(0.05, 0.95, box, transform=ax.transAxes, fontsize=10, va='top', ha="left",
+        bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))  ### boxplot
+
+
+plt.show()
+
+#endregion
+
+#region Figure 4
+
+'radiation calculated at th 21st of each month at AST:8 | 12 | 16'
+
+#endregion
 
 #endregion
