@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ashrae_data.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ashrae_data.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/import.py" afterDir="false" />
-    </list>
+    <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -117,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602079320324</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle.">
+      <created>1602242818024</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1602242818024</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -136,7 +156,8 @@
     <MESSAGE value="Added function to generate hourly data of radiation and &quot;sun angles&quot;. &#10;In the process of doing that, azimuth-angle was improved with sympy solve modules, but this change was irrelevant to the final result. Only simplified the code" />
     <MESSAGE value="Added functions to generate T_db monthly distributions and plot it" />
     <MESSAGE value="Added calculation of heating and cooling degree days" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added calculation of heating and cooling degree days" />
+    <MESSAGE value="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
   </component>
   <component name="WindowStateProjectService">
     <state x="479" y="195" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602082259383">
