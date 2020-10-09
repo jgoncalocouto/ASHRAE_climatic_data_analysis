@@ -19,7 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
+    <list default="true" id="55cce748-94a2-47e7-9d32-c76c0d07df0b" name="Default Changelist" comment="Solved:&#10;Speed issue with azimuth_angle_calculation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/import.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -137,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602242818024</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Solved:&#10;Speed issue with azimuth_angle_calculation">
+      <created>1602243677856</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1602243677856</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -157,9 +167,14 @@
     <MESSAGE value="Added functions to generate T_db monthly distributions and plot it" />
     <MESSAGE value="Added calculation of heating and cooling degree days" />
     <MESSAGE value="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added:&#10;- map with identification of location being analysed&#10;&#10;Ongoing:&#10;-Daily radiation in a representative day for a whole year parsed monthly&#10;&#10;Note: Commit being made with incomplete developments due to issue detected: Script is too slow due to simpy on azimuth angle." />
+    <MESSAGE value="Solved:&#10;Speed issue with azimuth_angle_calculation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Solved:&#10;Speed issue with azimuth_angle_calculation" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="646" y="218" key="#Inspections" timestamp="1602251854285">
+      <screen x="121" y="0" width="1799" height="1080" />
+    </state>
+    <state x="646" y="218" key="#Inspections/121.0.1799.1080@121.0.1799.1080" timestamp="1602251854285" />
     <state x="479" y="195" width="1092" height="715" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602082259383">
       <screen x="121" y="0" width="1799" height="1080" />
     </state>

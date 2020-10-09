@@ -355,6 +355,24 @@ def direction_to_surface_azimuth(direction):
 
     return surface_azimuth #[°]
 
+def surface_azimuth_to_direction(surface_azimuth):
+    directions_key={
+        'N':180,
+        'NE':-135,
+        'E':-90,
+        'SE':-45,
+        'S':0,
+        'SW':45,
+        'W':90,
+        'NW':135,
+       }
+    inv_map = {v: k for k, v in directions_key.items()}
+    direction = inv_map[surface_azimuth]
+
+    return direction #[]
+
+
+
 
 def incidence_angle(beta,surface_azimuth,phi,tilt_angle):
     gama=phi-surface_azimuth
@@ -388,10 +406,6 @@ def on_surface_irradiance(E_b,E_d,theta,tilt_angle,beta,rho_g=0.2):
     E_rt=(E_b*math.sin(beta)+E_d)*rho_g*((1+math.cos(beta))/2)
 
     return E_bt,E_dt,E_rt #[W/m^2]
-
-def get_instant_radiation_data():
-    pass
-
 
 
 def generate_hourly_data(latitude,longitude,time_zone,n_day,surface_azimuth,tilt_angle,radiation_data):
@@ -457,7 +471,7 @@ def generate_df_Tdistribution(n_sample,design_degree_days,plot=True):
         ax=sns.displot(df,x='T',hue='Month', label = month,kind='kde',fill=True)
     plt.xlabel('Dry-Bulb Temperature - [°C]')
     plt.ylabel('Probability Density Function - f - [-]')
-    plt.title('Dry-bulb Monthly Temperature Distribution')
+    plt.title('Dry-bulb Monthly Temperature Distribution',fontsize=14, weight='bold')
     return df,ax
 
 def month_limits(year):
@@ -572,7 +586,7 @@ def calculate_degree_days(date_start,date_end,T_heating,T_cooling,design_degree_
         df_sol.loc[row, 'Cooling Degree Days'] = CDD
     return df_sol
 
-def calculate_monthly_representative_radiation(radiation,latitude,longitute,time_zone,year=2020,surface_azimuth=0,tilt_angle=0):
+def calculate_monthly_representative_radiation(radiation,latitude,longitude,time_zone,year=2020,surface_azimuth=0,tilt_angle=0):
     day=21
 
     df=pd.DataFrame()
@@ -581,7 +595,9 @@ def calculate_monthly_representative_radiation(radiation,latitude,longitute,time
         n_day=get_n_from_date(day,i+1,year)
         df_day = generate_hourly_data(latitude, longitude, time_zone, n_day, surface_azimuth, tilt_angle, radiation)
         df_day['Month']=i+1
-        df_day=df_day[(df_day['LST'] == 9) | (df_day['LST'] == 12) | (df_day['LST'] == 15) | (df_day['LST'] == 18)]
+        df_day['Etotal,n']=df_day['Eb,n']+df_day['Ed,n']
+        df_day['Etotal,surface'] = df_day['Eb,surface'] + df_day['Ed,surface'] + df_day['Er,surface']
+        df_day=df_day[(df_day['LST'] == 9) | (df_day['LST'] == 12) | (df_day['LST'] == 15) | (df_day['LST'] == 17)]
         df=df.append(df_day,ignore_index=True)
     return df
 
@@ -609,7 +625,7 @@ list_of_lines=[]
 
 #region Figure 1
 list_of_figures.append(plt.figure(len(list_of_figures)+1,figsize=(16,8)))
-list_of_figures[0].suptitle('Temperature: Annual Limits')
+list_of_figures[0].suptitle('Temperature: Annual Limits',fontsize=14, weight='bold')
 list_of_axes.append(list_of_figures[0].add_subplot(1,2,1))
 
 #Subfigure1
@@ -676,7 +692,7 @@ ax = plt.axes(projection=ccrs.PlateCarree())
 ax.stock_img()
 list_of_axes.append(ax)
 list_of_figures.append(fig)
-ax.set_title('Details of the analysis')
+ax.set_title('Details of the analysis',fontsize=14, weight='bold')
 
 ny_lon, ny_lat = longitude, latitude
 
@@ -702,6 +718,31 @@ plt.show()
 #endregion
 
 #region Figure 4
+
+fig=plt.figure(figsize=(16,8))
+fig.suptitle('Irradiance at different daytime hours at the 21st of each month',fontsize=14, weight='bold')
+list_of_figures.append(fig)
+ax1=fig.add_subplot(121)
+list_of_axes.append(ax1)
+
+df_rad=calculate_monthly_representative_radiation(radiation,latitude,longitude,time_zone)
+
+n_colors=len(df_rad['LST'].unique())
+a=sns.color_palette("RdPu",n_colors)
+l1=sns.lineplot(x='Month',y='Etotal,n',style='LST',hue='LST',data=df_rad,palette=a,ax=ax1)
+ax1.set_title('Irradiance on a surface perpendicular to the solar rays')
+ax1.set_ylabel('Irradiance - [W/m^2]')
+ax1.set_xlabel('Month - [-]')
+
+ax2=fig.add_subplot(122,sharey=ax1,sharex=ax1)
+l2=sns.lineplot(x='Month',y='Etotal,surface',style='LST',hue='LST',data=df_rad,palette=a,ax=ax2)
+ax2.set_title('Total Irradiance on the surface | Tilted at '+str(tilt_angle)+' [°] | Orientation = '+str(surface_azimuth_to_direction(surface_azimuth)))
+ax2.set_ylabel('Irradiance - [W/m^2]')
+ax2.set_xlabel('Month - [-]')
+
+list_of_axes.append(ax2)
+
+
 
 'radiation calculated at th 21st of each month at AST:8 | 12 | 16'
 
