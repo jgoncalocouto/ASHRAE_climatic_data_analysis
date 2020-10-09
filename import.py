@@ -305,27 +305,19 @@ def azimuth_angle(H,delta,beta,latitude):
     H=math.radians(H)
     beta=math.radians(beta)
 
-    phi=sympy.Symbol('phi',real=True)
+    sin_phi=(math.sin(H)*math.cos(delta))/math.cos(beta)
+    cos_phi=(math.cos(H)*math.cos(delta)*math.sin(L)-math.sin(delta)*math.cos(L))/(math.cos(beta))
 
-    e1=sympy.Eq(sympy.sin(phi),(math.sin(H)*math.cos(delta))/(math.cos(beta)))
-    e2=sympy.Eq(sympy.cos(phi),((math.cos(H)*math.cos(delta)*math.sin(L))-(math.sin(delta)*math.cos(L)))/(math.cos(beta)))
+    # solution to a trigonometric equation has two solutions in [0,2*pi]:
+    phi_sin=np.array([math.asin(sin_phi),math.pi-math.asin(sin_phi)])
+    phi_cos=np.array([math.acos(cos_phi),2*math.pi-math.acos(cos_phi)])
 
-    try:
-        sol1 = sympy.solve([e1], phi)
-        sol2 = sympy.solve([e2], phi)
-        min=100
-        for i,valuei in enumerate(sol1):
-            for j,valuej in enumerate(sol2):
-                err=abs(valuei[0]-valuej[0])
-                if err<min:
-                    sol=i
-                    min=err
-        min_error=(min/sol1[sol][0])*100
-        phi=sol1[sol][0]
-    except:
-        print('Solution could not be obtained for azimuth angle')
-        phi=np.nan
-    phi=math.degrees(phi)
+    # solution for phi is the angle which minimizes the difference between cos(phi) and sin(phi)
+    phi_aux1=np.concatenate((phi_sin,phi_sin))
+    phi_aux2=reversed_arr = np.concatenate((phi_cos,phi_cos[::-1]))
+    err_rel=abs(phi_aux1-phi_aux2)
+    x=err_rel.argmin()
+    phi=math.degrees(phi_aux1[x])
 
     return phi #[°]
 
